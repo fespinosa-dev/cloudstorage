@@ -12,12 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("note")
 public class NoteController {
 
     private NoteService noteService;
@@ -30,7 +32,7 @@ public class NoteController {
     }
 
 
-    @PostMapping("/addnote")
+    @PostMapping("/add")
     public ResponseEntity<Note> addNote(Principal principal, @RequestBody Note note) {
         Optional<User> userOpt = userService.findUserByUsername(principal.getName());
         userOpt.ifPresent(u -> note.setUserId(u.getUserId()));
@@ -41,8 +43,14 @@ public class NoteController {
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
 
+    @PostMapping("/delete")
+    public ResponseEntity<Note> deleteNote(@RequestBody Note note) {
+        noteService.deleteNote(note);
+        return new ResponseEntity<>(note, HttpStatus.OK);
+    }
 
-    @GetMapping("/notelist")
+
+    @GetMapping("/list")
     public String getNoteList(Principal principal, Model model) {
         List<Note> notesByUsername = noteService.getAllNotesByUsername(principal.getName());
         model.addAttribute("notes", notesByUsername);

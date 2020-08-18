@@ -78,7 +78,8 @@
                                 <tr th:each="note : ${notes}">
                                         <td>
                                             <button type="button" class="btn btn-success">Edit</button>
-                                            <a class="btn btn-danger">Delete</a>
+                                            <a th:onclick="'deleteNote('+${note.id}+')'"
+                                               class="btn btn-danger">Delete</a>
                                         </td>
                                     <th th:text="${note.title}" scope="row">Example Note Title</th>
                                     <td th:text="${note.description}">Example Note Description</td>
@@ -190,57 +191,6 @@
         <script th:src="@{/js/jquery.min.js}"></script>
         <script th:src="@{/js/popper.min.js}"></script>
         <script th:src="@{/js/bootstrap.min.js}"></script>
-
-        <!--For opening the note modal-->
-        <script type="text/javascript">
-            // For opening the note modal
-            function showNoteModal(noteId, noteTitle, noteDescription) {
-                $('#note-id').val(noteId ? noteId : '');
-                $('#note-title').val(noteTitle ? noteTitle : '');
-                $('#note-description').val(noteDescription ? noteDescription : '');
-                $('#noteModal').modal('show');
-            }
-
-            // For opening the credentials modal
-            function showCredentialModal(credentialId, url, username, password) {
-                $('#credential-id').val(credentialId ? credentialId : '');
-                $('#credential-url').val(url ? url : '');
-                $('#credential-username').val(username ? username : '');
-                $('#credential-password').val(password ? password : '');
-                $('#credentialModal').modal('show');
-            }
-
-            function sendPostRequest(data, onSuccess) {
-                $.ajax({
-                    type: "POST",
-                    contentType: "application/json",
-                    url: "addnote",
-                    data: JSON.stringify(data),
-                    dataType: 'json',
-                    success: onSuccess
-                });
-            }
-
-            function saveNote(ev) {
-                ev.preventDefault();
-                var note = {};
-                note["title"] = $('#note-title').val();
-                note["description"] = $('#note-description').val();
-                sendPostRequest(note, function (data) {
-                    loadNoteList();
-                })
-            }
-
-            function loadNoteList() {
-                $.ajax({
-                    type: 'get',
-                    url: '/notelist',
-                    success: function (notesData) {
-                        $('#note_list').replaceWith(notesData);
-                        $('#noteModal').modal('hide');
-                    },
-                })
-            }
-        </script>
+        <script th:src="@{/js/main.js}"></script>
     </body>
 </html>
