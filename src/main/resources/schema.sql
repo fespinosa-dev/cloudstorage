@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS USERS (
 );
 
 CREATE TABLE IF NOT EXISTS NOTES (
-    noteid INT PRIMARY KEY auto_increment,
-    notetitle VARCHAR(20),
-    notedescription VARCHAR (1000),
+    id INT PRIMARY KEY auto_increment,
+    title VARCHAR(20),
+    description VARCHAR (1000),
     userid INT,
     foreign key (userid) references USERS(userid)
 );
@@ -34,3 +34,6 @@ CREATE TABLE IF NOT EXISTS CREDENTIALS (
     userid INT,
     foreign key (userid) references USERS(userid)
 );
+
+INSERT INTO users (username,salt, password,firstname, lastname)
+VALUES ('fespinosa','KgLW5H4EVh/OsKIwmRsIqA==', 'iQxEhDPhkPzmwEj8hk/r/A==', 'Fernando', 'Espinosa');

@@ -66,7 +66,7 @@
                         </button>
 
                         <div class="table-responsive">
-                            <table class="table table-striped" id="userTable">
+                            <table class="table table-striped" th:fragment="note_list" id="note_list">
                                 <thead>
                                     <tr>
                                         <th style="width: 20%" scope="col"></th>
@@ -75,13 +75,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                <tr th:each="note : ${notes}">
                                         <td>
                                             <button type="button" class="btn btn-success">Edit</button>
                                             <a class="btn btn-danger">Delete</a>
                                         </td>
-                                        <th scope="row">Example Note Title</th>
-                                        <td>Example Note Description </td>
+                                    <th th:text="${note.title}" scope="row">Example Note Title</th>
+                                    <td th:text="${note.description}">Example Note Description</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -107,7 +107,8 @@
                                                 <label for="note-description" class="col-form-label">Description</label>
                                                 <textarea class="form-control" name="noteDescription" id="note-description" rows="5" maxlength="1000" required></textarea>
                                             </div>
-                                            <button id="noteSubmit" type="submit" class="d-none"></button>
+                                            <button id="noteSubmit" onclick="saveNote(event)" type="submit"
+                                                    class="d-none"></button>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
@@ -186,7 +187,7 @@
             </div>
         </div>
 
-        <script th:src="@{/js/jquery-slim.min.js}"></script>
+        <script th:src="@{/js/jquery.min.js}"></script>
         <script th:src="@{/js/popper.min.js}"></script>
         <script th:src="@{/js/bootstrap.min.js}"></script>
 
@@ -207,6 +208,38 @@
                 $('#credential-username').val(username ? username : '');
                 $('#credential-password').val(password ? password : '');
                 $('#credentialModal').modal('show');
+            }
+
+            function sendPostRequest(data, onSuccess) {
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    url: "addnote",
+                    data: JSON.stringify(data),
+                    dataType: 'json',
+                    success: onSuccess
+                });
+            }
+
+            function saveNote(ev) {
+                ev.preventDefault();
+                var note = {};
+                note["title"] = $('#note-title').val();
+                note["description"] = $('#note-description').val();
+                sendPostRequest(note, function (data) {
+                    loadNoteList();
+                })
+            }
+
+            function loadNoteList() {
+                $.ajax({
+                    type: 'get',
+                    url: '/notelist',
+                    success: function (notesData) {
+                        $('#note_list').replaceWith(notesData);
+                        $('#noteModal').modal('hide');
+                    },
+                })
             }
         </script>
     </body>
