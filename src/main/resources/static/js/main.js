@@ -15,11 +15,7 @@ function showCredentialModal(credentialId, url, username, password) {
     $('#credentialModal').modal('show');
 }
 
-function saveNote(ev) {
-    ev.preventDefault();
-    var note = {};
-    note["title"] = $('#note-title').val();
-    note["description"] = $('#note-description').val();
+function addNote(note) {
     $.ajax({
         type: "POST",
         contentType: "application/json",
@@ -33,6 +29,36 @@ function saveNote(ev) {
             console.log(e)
         }
     });
+}
+
+function updateNote(note) {
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/note/update",
+        data: JSON.stringify(note),
+        dataType: 'json',
+        success: function (data) {
+            loadNoteList();
+        },
+        error: function (e) {
+            console.log(e)
+        }
+    });
+}
+
+function saveNoteChanges(ev) {
+    ev.preventDefault();
+    var note = {};
+    note['id'] = $('#note-id').val();
+    note["title"] = $('#note-title').val();
+    note["description"] = $('#note-description').val();
+    if (note.id != "") {
+        updateNote(note);
+    } else {
+        addNote(note);
+    }
+
 }
 
 function deleteNote(noteId) {

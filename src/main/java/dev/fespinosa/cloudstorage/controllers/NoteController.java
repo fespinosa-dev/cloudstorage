@@ -34,18 +34,25 @@ public class NoteController {
 
     @PostMapping("/add")
     public ResponseEntity<Note> addNote(Principal principal, @RequestBody Note note) {
+        ResponseEntity<Note> responseEntity = new ResponseEntity<>(note, HttpStatus.OK);
         Optional<User> userOpt = userService.findUserByUsername(principal.getName());
         userOpt.ifPresent(u -> note.setUserId(u.getUserId()));
         int notesCreated = noteService.createNote(note);
         if (notesCreated <= 0) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(note, HttpStatus.OK);
+        return responseEntity;
     }
 
     @PostMapping("/delete")
     public ResponseEntity<Note> deleteNote(@RequestBody Note note) {
         noteService.deleteNote(note);
+        return new ResponseEntity<>(note, HttpStatus.OK);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<Note> updateNote(@RequestBody Note note) {
+        noteService.updateNote(note);
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
 
