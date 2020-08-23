@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface NoteMapper {
 
-    @Select("SELECT * FROM notes n JOIN users u ON n.userid =n.userid WHERE u.username = #{username}")
+    @Select("SELECT * FROM notes n JOIN users u ON n.userid = u.userid WHERE u.username = #{username}")
     List<Note> getNotesByUsername(String username);
 
     @Insert("INSERT INTO notes (title, description, userId) VALUES (#{title}, #{description}, #{userId})")

@@ -5,8 +5,6 @@ import dev.fespinosa.cloudstorage.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
-import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -23,7 +21,7 @@ public class UserService {
     }
 
     public int createUser(User user) {
-        String encodedSalt = getEncodedSalt();
+        String encodedSalt = hashService.generateEncodedSalt();
         String hashedPassword = hashService.getHashedValue(user.getPassword(), encodedSalt);
         User newUser = new User();
         newUser.setUsername(user.getUsername());
@@ -38,10 +36,4 @@ public class UserService {
         return userMapper.getUser(username);
     }
 
-    private String getEncodedSalt() {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        return Base64.getEncoder().encodeToString(salt);
-    }
 }

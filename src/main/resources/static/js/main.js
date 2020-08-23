@@ -94,3 +94,46 @@ function loadNoteList() {
 }
 
 
+function saveCredentialChanges(ev) {
+    ev.preventDefault();
+    var credential = {};
+    credential['id'] = $('#credential-id').val();
+    credential["url"] = $('#credential-url').val();
+    credential["username"] = $('#credential-username').val();
+    credential["password"] = $('#credential-password').val();
+
+    addCredential(credential);
+}
+
+function addCredential(credential) {
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/credential/add",
+        data: JSON.stringify(credential),
+        dataType: 'json',
+        success: function (data) {
+            loadCredentialList();
+        },
+        error: function (e) {
+            console.log(e)
+        }
+    });
+}
+
+
+function loadCredentialList() {
+    $.ajax({
+        type: 'get',
+        url: '/credential/list',
+        success: function (credentialList) {
+            $('#credential_list').replaceWith(credentialList);
+            $('#credentialModal').modal('hide');
+        },
+        error: function (e) {
+            console.log(e)
+        }
+    })
+}
+
+
