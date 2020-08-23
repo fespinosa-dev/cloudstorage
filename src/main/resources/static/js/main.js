@@ -127,6 +127,7 @@ function loadCredentialList() {
         type: 'get',
         url: '/credential/list',
         success: function (credentialList) {
+            console.log(credentialList);
             $('#credential_list').replaceWith(credentialList);
             $('#credentialModal').modal('hide');
         },

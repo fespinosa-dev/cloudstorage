@@ -68,7 +68,7 @@ public class CredentialsController {
         List<Credentials> credentialsByUsername =
                 credentialService.getAllCredentialsByUsername(principal.getName());
         model.addAttribute("credentials", credentialsByUsername);
-        return "home::credentials_list";
+        return "home::credential_list";
     }
 
 }
