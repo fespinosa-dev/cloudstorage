@@ -159,7 +159,7 @@
                                                                             getAttribute('data-username'),
                                                                             getAttribute('data-password'));">Edit
                                         </button>
-                                        <a class="btn btn-danger">Delete</a>
+                                        <a class="btn btn-danger" th:onclick="'deleteCredential('+${credential.id}+')'">Delete</a>
                                     </td>
                                     <th scope="row" th:text="${credential.url}"></th>
                                     <td th:text="${credential.username}">Example Credential Username</td>

@@ -140,6 +140,23 @@ function updateCredential(credential) {
     });
 }
 
+function deleteCredential(credentialId) {
+    var credential = {};
+    credential["id"] = credentialId;
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/credential/delete",
+        data: JSON.stringify(credential),
+        dataType: 'json',
+        success: function (data) {
+            loadCredentialList();
+        },
+        error: function (e) {
+            console.log(e)
+        }
+    });
+}
 
 
 function loadCredentialList() {
