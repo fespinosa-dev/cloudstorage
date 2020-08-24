@@ -58,6 +58,9 @@ public class CredentialsController {
 
     @PostMapping("/update")
     public ResponseEntity<Credentials> updateCredentials(@RequestBody Credentials credentials) {
+        Optional<Credentials> credentialsOpt =
+                credentialService.findCredentialById(credentials.getId());
+        credentialsOpt.ifPresent(c -> credentials.setKey(c.getKey()));
         credentialService.updateCredentials(credentials);
         return new ResponseEntity<>(credentials, HttpStatus.OK);
     }

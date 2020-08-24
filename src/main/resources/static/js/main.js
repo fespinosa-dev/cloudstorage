@@ -101,8 +101,11 @@ function saveCredentialChanges(ev) {
     credential["url"] = $('#credential-url').val();
     credential["username"] = $('#credential-username').val();
     credential["password"] = $('#credential-password').val();
-
-    addCredential(credential);
+    if (credential.id != "") {
+        updateCredential(credential);
+    } else {
+        addCredential(credential);
+    }
 }
 
 function addCredential(credential) {
@@ -120,6 +123,23 @@ function addCredential(credential) {
         }
     });
 }
+
+function updateCredential(credential) {
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/credential/update",
+        data: JSON.stringify(credential),
+        dataType: 'json',
+        success: function (data) {
+            loadCredentialList();
+        },
+        error: function (e) {
+            console.log(e)
+        }
+    });
+}
+
 
 
 function loadCredentialList() {

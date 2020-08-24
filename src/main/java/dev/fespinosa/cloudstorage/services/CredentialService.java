@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CredentialService {
@@ -32,7 +33,14 @@ public class CredentialService {
     }
 
     public void updateCredentials(Credentials credentials) {
+        String secretKey = credentials.getKey();
+        String encryptedPass = encryptionService.encryptValue(credentials.getPassword(), secretKey);
+        credentials.setPassword(encryptedPass);
         credentialsMapper.update(credentials);
+    }
+
+    public Optional<Credentials> findCredentialById(Integer id) {
+        return credentialsMapper.getCredentialById(id);
     }
 
     public List<Credentials> getAllCredentialsByUsername(String username) {
