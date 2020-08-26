@@ -20,7 +20,11 @@ public class UserService {
         this.hashService = hashService;
     }
 
-    public int createUser(User user) {
+    public int createUser(User user) throws UsernameAlreadyExistsException {
+        Optional<User> userOpt = userMapper.getUser(user.getUsername());
+        if (userOpt.isPresent()) {
+            throw new UsernameAlreadyExistsException("Username already exists.");
+        }
         String encodedSalt = hashService.generateEncodedSalt();
         String hashedPassword = hashService.getHashedValue(user.getPassword(), encodedSalt);
         User newUser = new User();
@@ -36,4 +40,10 @@ public class UserService {
         return userMapper.getUser(username);
     }
 
+    public class UsernameAlreadyExistsException extends Exception {
+
+        public UsernameAlreadyExistsException(String message) {
+            super(message);
+        }
+    }
 }

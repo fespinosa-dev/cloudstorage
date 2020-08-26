@@ -79,6 +79,32 @@ class CloudStorageApplicationTests {
     }
 
 
+    @Test
+    public void testSignsUpLoginAndLogoutFlow() {
+        SignUpPage signUpPage = new SignUpPage(driver);
+        getPage("/signup");
+
+        signUpPage.doSignUp("Marco", "Espinosa",
+                "mespinosa", "secretPassword");
+
+        LoginPage loginPage = new LoginPage(driver);
+        getPage("/login");
+
+        loginPage.doLogin("mespinosa", "secretPassword");
+
+        assertThat(driver.getTitle()).isEqualTo("Home");
+
+        HomePage homePage = new HomePage(driver);
+
+        homePage.doLogOut();
+
+        getPage("/home");
+
+        assertThat(driver.getTitle()).isEqualTo("Login");
+
+    }
+
+
     private void getPage(String page) {
         driver.get("http://localhost:" + this.port + page);
     }
