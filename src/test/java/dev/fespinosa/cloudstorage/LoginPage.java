@@ -23,7 +23,6 @@ public class LoginPage extends Page {
 
 
     public void doLogin(String userName, String password) {
-//        wait.until(ExpectedConditions.visibilityOf(this.usernameField));
         usernameField.sendKeys(userName);
         passwordField.sendKeys(password);
         loginButton.submit();
