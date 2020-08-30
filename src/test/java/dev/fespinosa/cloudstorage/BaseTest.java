@@ -37,7 +37,7 @@ public class BaseTest {
     @AfterEach
     public void afterEach() {
         if (this.driver != null) {
-//            driver.quit();
+            driver.quit();
         }
     }
 
