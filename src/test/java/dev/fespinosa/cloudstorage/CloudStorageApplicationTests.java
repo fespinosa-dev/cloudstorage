@@ -1,7 +1,10 @@
 package dev.fespinosa.cloudstorage;
 
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -82,15 +85,78 @@ class CloudStorageApplicationTests extends BaseTest {
 
         HomePage homePage = new HomePage(driver);
 
+        getPage("/home");
+
         homePage.selectTab("Notes");
 
         homePage.doAddNote("Note Title", "Note description");
 
-        WebElement noteTitle = findElementByText("Note Title");
-        WebElement noteDescription = findElementByText("Note description");
+        Optional<WebElement> noteTitleOpt = findElementByText("Note Title");
+        Optional<WebElement> noteDescriptionOpt = findElementByText("Note description");
 
-        assertThat(noteTitle.isDisplayed()).isTrue();
-        assertThat(noteDescription.isDisplayed()).isTrue();
+        assertThat(noteTitleOpt).isNotEmpty();
+        assertThat(noteDescriptionOpt).isNotEmpty();
+        assertThat(noteTitleOpt.get().getText()).isEqualTo("Note Title");
+        assertThat(noteDescriptionOpt.get().getText()).isEqualTo("Note description");
+
+
+    }
+
+    @Test
+    public void testEditNote() {
+        LoginPage loginPage = new LoginPage(driver);
+        getPage("/login");
+
+        loginPage.doLogin("fespinosa", "locotron");
+
+        assertThat(driver.getTitle()).isEqualTo("Home");
+
+        HomePage homePage = new HomePage(driver);
+
+        getPage("/home");
+
+        homePage.selectTab("Notes");
+
+        Optional<WebElement> noteTitleOpt = findElementByText("Learning Spring Boot");
+        Optional<WebElement> noteDescriptionOpt = findElementByText("This is a new note desc");
+
+        assertThat(noteTitleOpt).isNotEmpty();
+        assertThat(noteDescriptionOpt).isNotEmpty();
+        assertThat(noteTitleOpt.get().getText()).isEqualTo("Learning Spring Boot");
+        assertThat(noteDescriptionOpt.get().getText()).isEqualTo("This is a new note desc");
+
+        homePage.doEditNote("New title", "New description");
+
+        Optional<WebElement> noteTitleEditedOpt = findElementByText("New title");
+        Optional<WebElement> noteDescriptionEditedOpt = findElementByText("New description");
+
+        assertThat(noteTitleEditedOpt).isNotEmpty();
+        assertThat(noteDescriptionEditedOpt).isNotEmpty();
+        assertThat(noteTitleEditedOpt.get().getText()).isEqualTo("New title");
+        assertThat(noteDescriptionEditedOpt.get().getText()).isEqualTo("New description");
+
+    }
+
+    @Test
+    public void testDeleteNote() {
+        LoginPage loginPage = new LoginPage(driver);
+        getPage("/login");
+
+        loginPage.doLogin("fespinosa", "locotron");
+
+        assertThat(driver.getTitle()).isEqualTo("Home");
+
+        HomePage homePage = new HomePage(driver);
+
+        getPage("/home");
+
+        homePage.selectTab("Notes");
+
+        homePage.doDeleteNote();
+
+        Boolean notesPresent = driver.findElements(By.cssSelector("#note_list > tbody tr")).size() > 0;
+
+        assertThat(notesPresent).isFalse();
 
 
     }

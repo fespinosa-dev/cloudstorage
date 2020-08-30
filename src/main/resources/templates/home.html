@@ -78,7 +78,7 @@
                                 <tbody>
                                 <tr th:each="note : ${notes}">
                                         <td>
-                                            <button type="button" class="btn btn-success"
+                                            <button id="editNoteButton" type="button" class="btn btn-success"
                                                     th:data-id="${note.id}"
                                                     th:data-title="${note.title}"
                                                     th:data-desc="${note.description}"
@@ -88,7 +88,7 @@
                                                 Edit
                                             </button>
 
-                                            <a th:onclick="'deleteNote('+${note.id}+')'"
+                                            <a id="deleteNoteButton" th:onclick="'deleteNote('+${note.id}+')'"
                                                class="btn btn-danger">Delete</a>
                                         </td>
                                     <th th:text="${note.title}" scope="row">Example Note Title</th>

@@ -5,12 +5,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -35,12 +37,19 @@ public class BaseTest {
     @AfterEach
     public void afterEach() {
         if (this.driver != null) {
-            driver.quit();
+//            driver.quit();
         }
     }
 
-    protected WebElement findElementByText(String text) {
-        return driver.findElement(By.xpath("//*[contains(text(),'" + text + "')]"));
+    protected Optional<WebElement> findElementByText(String text) {
+        Optional<WebElement> webElementOpt = Optional.empty();
+        try {
+            WebElement element = driver.findElement(By.xpath("//*[contains(text(),'" + text + "')]"));
+            webElementOpt = Optional.of(element);
+        } catch (NoSuchElementException ex) {
+            ex.printStackTrace();
+        }
+        return webElementOpt;
     }
 
     protected void getPage(String page) {

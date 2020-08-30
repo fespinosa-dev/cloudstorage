@@ -37,3 +37,8 @@ CREATE TABLE IF NOT EXISTS CREDENTIALS (
 
 INSERT INTO users (username,salt, password,firstname, lastname)
 VALUES ('fespinosa','KgLW5H4EVh/OsKIwmRsIqA==', 'iQxEhDPhkPzmwEj8hk/r/A==', 'Fernando', 'Espinosa');
+
+INSERT INTO notes (title, description, userId) VALUES ('Learning Spring Boot', 'This is a new note desc', 1);
+
+INSERT INTO credentials (url, key, userId, username, password)
+VALUES ('http://test.com', 'mpZsOgyNGRVL1i0lAEvFJw==', 1, 'username', 'Qc6c4UAc1X4zsrgWHcMp+Q==');

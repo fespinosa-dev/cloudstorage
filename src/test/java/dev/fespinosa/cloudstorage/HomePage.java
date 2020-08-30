@@ -14,6 +14,12 @@ public class HomePage extends Page {
     @FindBy(id = "addNoteButton")
     private WebElement addNoteButton;
 
+    @FindBy(id = "editNoteButton")
+    private WebElement editNoteButton;
+
+    @FindBy(id = "deleteNoteButton")
+    private WebElement deleteNoteButton;
+
     private NoteModal noteModal;
 
 
@@ -35,8 +41,27 @@ public class HomePage extends Page {
         noteModal.saveNote();
     }
 
+    public void doEditNote(String title, String description) {
+        wait.until(ExpectedConditions.visibilityOf(this.editNoteButton));
+        editNoteButton.click();
+        noteModal.getTitleField().clear();
+        noteModal.getDescriptionField().clear();
+        noteModal.getTitleField().sendKeys(title);
+        noteModal.getDescriptionField().sendKeys(description);
+        noteModal.saveNote();
+    }
+
+    public void doDeleteNote() {
+        wait.until(ExpectedConditions.visibilityOf(deleteNoteButton));
+        deleteNoteButton.click();
+        wait.until(ExpectedConditions.invisibilityOf(deleteNoteButton));
+    }
+
     public void selectTab(String tabName) {
         wait.until(ExpectedConditions.elementToBeClickable(By.linkText(tabName))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("note_list")));
+
+
     }
 
 }
