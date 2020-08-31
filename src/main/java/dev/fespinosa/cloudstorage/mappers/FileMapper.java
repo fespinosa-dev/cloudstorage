@@ -11,8 +11,8 @@ public interface FileMapper {
     @Select("SELECT * FROM files f JOIN users u ON f.userid = u.userid WHERE u.username = #{username}")
     List<File> getFilesByUsername(String username);
 
-    @Select("SELECT * FROM files WHERE id = #{id}")
-    Optional<File> getFileById(Integer id);
+    @Select("SELECT * FROM files WHERE name = #{name}")
+    Optional<File> getFileByName(String name);
 
     @Insert("INSERT INTO files (name, contentType, fileSize, userId) VALUES (#{name}, #{contentType}, #{fileSize}, #{userId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")

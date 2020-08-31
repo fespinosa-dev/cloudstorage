@@ -44,7 +44,11 @@ public class FileService {
         return fileMapper.getFilesByUsername(username);
     }
 
-    private Path getFileStoragePath(String fileName) {
+    public Optional<File> getFileByName(String fileName) {
+        return fileMapper.getFileByName(fileName);
+    }
+
+    public Path getFileStoragePath(String fileName) {
         Principal principal = getPrincipal();
         return Paths.get(UPLOADED_FOLDER
                 + java.io.File.separator + "cloud-storage" +
@@ -57,7 +61,7 @@ public class FileService {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
-    private void createDirectoriesIfNotExist(Path fileStoragePath) throws IOException {
+    public void createDirectoriesIfNotExist(Path fileStoragePath) throws IOException {
         Path parentDir = fileStoragePath.getParent();
         if (!Files.exists(parentDir))
             Files.createDirectories(parentDir);

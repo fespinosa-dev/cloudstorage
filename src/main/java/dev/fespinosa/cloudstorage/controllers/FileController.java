@@ -4,14 +4,20 @@ import dev.fespinosa.cloudstorage.model.File;
 import dev.fespinosa.cloudstorage.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/file")
@@ -44,6 +50,29 @@ public class FileController {
 
 
         return "redirect:/home";
+
+    }
+
+    @RequestMapping("/download/{fileName:.+}")
+    public void downloadPDFResource(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    @PathVariable("fileName") String fileName) {
+        Optional<File> fileOpt = fileService.getFileByName(fileName);
+
+        Optional<Path> fileStoragePathOpt = fileOpt
+                .map(File::getName)
+                .map(fileService::getFileStoragePath);
+
+        if (fileStoragePathOpt.isPresent()) {
+            try {
+                response.setContentType(fileOpt.get().getContentType());
+                response.addHeader("Content-Disposition", "attachment; filename=" + fileOpt.get().getName());
+                Files.copy(fileStoragePathOpt.get(), response.getOutputStream());
+                response.getOutputStream().flush();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
 
     }
 }
