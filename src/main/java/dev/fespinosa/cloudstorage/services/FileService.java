@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,6 +38,10 @@ public class FileService {
         Files.write(fileStoragePath, file.getContent());
         return fileMapper.insert(file);
 
+    }
+
+    public List<File> getAllFilesByUsername(String username) {
+        return fileMapper.getFilesByUsername(username);
     }
 
     private Path getFileStoragePath(String fileName) {
