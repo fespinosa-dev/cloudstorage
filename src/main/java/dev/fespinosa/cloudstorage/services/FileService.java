@@ -44,9 +44,6 @@ public class FileService {
         return fileMapper.getFilesByUsername(username);
     }
 
-    public Optional<File> getFileByName(String fileName) {
-        return fileMapper.getFileByName(fileName);
-    }
 
     public Path getFileStoragePath(String fileName) {
         Principal principal = getPrincipal();
@@ -65,5 +62,35 @@ public class FileService {
         Path parentDir = fileStoragePath.getParent();
         if (!Files.exists(parentDir))
             Files.createDirectories(parentDir);
+    }
+
+    public Optional<File> getFileByName(String name) {
+        return fileMapper.getFileByName(name);
+    }
+
+    public boolean deleteFile(File file) {
+        boolean fileDeleted = false;
+        Optional<File> fileByName = fileMapper.getFileById(file.getId());
+        Optional<Path> fileStoragePathOpt = fileByName.map(File::getName)
+                .map(this::getFileStoragePath);
+
+        fileDeleted = fileStoragePathOpt
+                .map(this::deletePhysicalFile)
+                .orElse(false);
+
+        if (fileDeleted) {
+            fileMapper.delete(file);
+        }
+        return fileDeleted;
+    }
+
+    private boolean deletePhysicalFile(Path fileStoragePathOpt) {
+        boolean physicalFileDeleted = false;
+        try {
+            physicalFileDeleted = Files.deleteIfExists(fileStoragePathOpt);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return physicalFileDeleted;
     }
 }

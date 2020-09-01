@@ -79,6 +79,24 @@ function deleteNote(noteId) {
     });
 }
 
+function deleteFile(id) {
+    var file = {};
+    file["id"] = id;
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/file/delete",
+        data: JSON.stringify(file),
+        dataType: 'json',
+        success: function (data) {
+            loadFileList();
+        },
+        error: function (e) {
+            console.log(e)
+        }
+    });
+}
+
 function loadNoteList() {
     $.ajax({
         type: 'get',
@@ -167,6 +185,20 @@ function loadCredentialList() {
             console.log(credentialList);
             $('#credential_list').replaceWith(credentialList);
             $('#credentialModal').modal('hide');
+        },
+        error: function (e) {
+            console.log(e)
+        }
+    })
+}
+
+function loadFileList() {
+    $.ajax({
+        type: 'get',
+        url: '/file/list',
+        success: function (fileList) {
+            console.log(fileList);
+            $('#file_list').replaceWith(fileList);
         },
         error: function (e) {
             console.log(e)
