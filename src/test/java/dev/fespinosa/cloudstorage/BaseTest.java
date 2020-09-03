@@ -44,7 +44,7 @@ public class BaseTest {
     protected Optional<WebElement> findElementByText(String text) {
         Optional<WebElement> webElementOpt = Optional.empty();
         try {
-            WebElement element = driver.findElement(By.xpath("//*[contains(text(),'" + text + "')]"));
+            WebElement element = driver.findElement(By.xpath("//*[text()='" + text + "']"));
             webElementOpt = Optional.of(element);
         } catch (NoSuchElementException ex) {
             ex.printStackTrace();

@@ -3,6 +3,7 @@ package dev.fespinosa.cloudstorage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class NoteModal extends Page {
 
@@ -22,11 +23,13 @@ public class NoteModal extends Page {
 
 
     public WebElement getTitleField() {
+        wait.until(ExpectedConditions.elementToBeClickable(titleField)).click();
         return titleField;
     }
 
 
     public WebElement getDescriptionField() {
+        wait.until(ExpectedConditions.elementToBeClickable(descriptionField)).click();
         return descriptionField;
     }
 

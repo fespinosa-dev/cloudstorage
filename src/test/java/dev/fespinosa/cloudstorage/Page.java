@@ -7,11 +7,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public abstract class Page {
 
     protected WebDriverWait wait;
+    protected WebDriver driver;
 
 
     public Page(WebDriver driver) {
+        this.driver = driver;
         PageFactory.initElements(driver, this);
-        wait = new WebDriverWait(driver, 15, 50);
+        this.wait = new WebDriverWait(driver, 15, 50);
 
     }
+
 }

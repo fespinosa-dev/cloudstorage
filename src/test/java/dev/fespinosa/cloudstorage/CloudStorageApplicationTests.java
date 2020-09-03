@@ -1,13 +1,15 @@
 package dev.fespinosa.cloudstorage;
 
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.WebElement;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
+@TestMethodOrder(OrderAnnotation.class)
 class CloudStorageApplicationTests extends BaseTest {
 
 
@@ -89,7 +91,7 @@ class CloudStorageApplicationTests extends BaseTest {
 
         homePage.selectTab("Notes");
 
-        homePage.doAddNote("Note Title", "Note description");
+        homePage.addNote("Note Title", "Note description");
 
         Optional<WebElement> noteTitleOpt = findElementByText("Note Title");
         Optional<WebElement> noteDescriptionOpt = findElementByText("Note description");
@@ -125,15 +127,15 @@ class CloudStorageApplicationTests extends BaseTest {
         assertThat(noteTitleOpt.get().getText()).isEqualTo("Learning Spring Boot");
         assertThat(noteDescriptionOpt.get().getText()).isEqualTo("This is a new note desc");
 
-        homePage.doEditNote("New title", "New description");
+        homePage.editNoteByTitle("Learning Spring Boot", "New title title", "New description 2");
 
-        Optional<WebElement> noteTitleEditedOpt = findElementByText("New title");
-        Optional<WebElement> noteDescriptionEditedOpt = findElementByText("New description");
+        Optional<WebElement> noteTitleEditedOpt = findElementByText("New title title");
+        Optional<WebElement> noteDescriptionEditedOpt = findElementByText("New description 2");
 
         assertThat(noteTitleEditedOpt).isNotEmpty();
         assertThat(noteDescriptionEditedOpt).isNotEmpty();
-        assertThat(noteTitleEditedOpt.get().getText()).isEqualTo("New title");
-        assertThat(noteDescriptionEditedOpt.get().getText()).isEqualTo("New description");
+        assertThat(noteTitleEditedOpt.get().getText()).isEqualTo("New title title");
+        assertThat(noteDescriptionEditedOpt.get().getText()).isEqualTo("New description 2");
 
     }
 
@@ -152,13 +154,112 @@ class CloudStorageApplicationTests extends BaseTest {
 
         homePage.selectTab("Notes");
 
-        homePage.doDeleteNote();
+        homePage.addNote("Note to be deleted", "We are going to delete you");
 
-        Boolean notesPresent = driver.findElements(By.cssSelector("#note_list > tbody tr")).size() > 0;
+        Optional<WebElement> noteToBeDeleted = findElementByText("Note to be deleted");
 
-        assertThat(notesPresent).isFalse();
+        assertThat(noteToBeDeleted).isNotEmpty();
+
+        homePage.deleteNoteByTitle("Note to be deleted");
+
+        Optional<WebElement> noteDeletedOpt = findElementByText("Note to be deleted");
+
+        assertThat(noteDeletedOpt).isEmpty();
 
 
     }
+
+    @Test
+    public void testAddCredential() {
+        LoginPage loginPage = new LoginPage(driver);
+        getPage("/login");
+
+        loginPage.doLogin("fespinosa", "locotron");
+
+        assertThat(driver.getTitle()).isEqualTo("Home");
+
+        HomePage homePage = new HomePage(driver);
+
+        getPage("/home");
+
+        homePage.selectTab("Credentials");
+
+        homePage.addCredential("https://www.google.com/", "username", "password");
+
+        Optional<WebElement> urlOpt = findElementByText("https://www.google.com/");
+        Optional<WebElement> usernameOpt = findElementByText("username");
+        Optional<WebElement> passwordOpt = findElementByText("password");
+
+
+        assertThat(urlOpt).isNotEmpty();
+        assertThat(usernameOpt).isNotEmpty();
+        assertThat(passwordOpt).isNotEmpty();
+        assertThat(urlOpt.get().getText()).isEqualTo("https://www.google.com/");
+        assertThat(usernameOpt.get().getText()).isEqualTo("username");
+        assertThat(passwordOpt.get().getText()).isEqualTo("password");
+
+    }
+
+    @Test
+    public void testEditCredential() {
+        LoginPage loginPage = new LoginPage(driver);
+        getPage("/login");
+
+        loginPage.doLogin("fespinosa", "locotron");
+
+        assertThat(driver.getTitle()).isEqualTo("Home");
+
+        HomePage homePage = new HomePage(driver);
+
+        getPage("/home");
+
+        homePage.selectTab("Credentials");
+
+        homePage.editCredentialByUrl("http://test.com", "https://www.google2.com/",
+                "new username", "new password");
+
+        Optional<WebElement> urlOpt = findElementByText("https://www.google2.com/");
+        Optional<WebElement> usernameOpt = findElementByText("new username");
+        Optional<WebElement> passwordOpt = findElementByText("new password");
+
+
+        assertThat(urlOpt).isNotEmpty();
+        assertThat(usernameOpt).isNotEmpty();
+        assertThat(passwordOpt).isNotEmpty();
+        assertThat(urlOpt.get().getText()).isEqualTo("https://www.google2.com/");
+        assertThat(usernameOpt.get().getText()).isEqualTo("new username");
+        assertThat(passwordOpt.get().getText()).isEqualTo("new password");
+
+    }
+
+    @Test
+    public void testDeleteCredential() {
+        LoginPage loginPage = new LoginPage(driver);
+        getPage("/login");
+
+        loginPage.doLogin("fespinosa", "locotron");
+
+        assertThat(driver.getTitle()).isEqualTo("Home");
+
+        HomePage homePage = new HomePage(driver);
+
+        getPage("/home");
+
+        homePage.selectTab("Credentials");
+
+        homePage.addCredential("https://www.credential-to-delete.com/", "fespinosa", "password");
+
+        Optional<WebElement> credentialToBeDeleted = findElementByText("https://www.credential-to-delete.com/");
+
+        assertThat(credentialToBeDeleted).isNotEmpty();
+
+        homePage.deleteCredentialByUrl("https://www.credential-to-delete.com/");
+
+        Optional<WebElement> deletedCredential = findElementByText("https://www.credential-to-delete.com/");
+
+        assertThat(deletedCredential).isEmpty();
+
+    }
+
 
 }
