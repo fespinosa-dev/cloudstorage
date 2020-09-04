@@ -22,6 +22,11 @@ import java.util.Optional;
 @RequestMapping("/note")
 public class NoteController {
 
+    private final String NOTE_ADDED_MSG = "\"Note was successfully added!\"";
+    private final String NOTE_DELETED_MSG = "\"Note was successfully deleted!\"";
+    private final String NOTE_UPDATED_MSG = "\"Note was successfully updated!\"";
+    private final String NOTE_ERROR_MSG = "\"There was an error adding the note!\"";
+
     private NoteService noteService;
     private UserService userService;
 
@@ -32,28 +37,28 @@ public class NoteController {
     }
 
 
-    @PostMapping("/add")
-    public ResponseEntity<Note> addNote(Principal principal, @RequestBody Note note) {
-        ResponseEntity<Note> responseEntity = new ResponseEntity<>(note, HttpStatus.OK);
+    @PostMapping(value = "/add", produces = "text/plain")
+    public ResponseEntity<String> addNote(Principal principal, @RequestBody Note note) {
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(NOTE_ADDED_MSG, HttpStatus.OK);
         Optional<User> userOpt = userService.findUserByUsername(principal.getName());
         userOpt.ifPresent(u -> note.setUserId(u.getUserId()));
         int notesCreated = noteService.createNote(note);
         if (notesCreated <= 0) {
-            responseEntity = new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(NOTE_ERROR_MSG, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<Note> deleteNote(@RequestBody Note note) {
+    public ResponseEntity<String> deleteNote(@RequestBody Note note) {
         noteService.deleteNote(note);
-        return new ResponseEntity<>(note, HttpStatus.OK);
+        return new ResponseEntity<>(NOTE_DELETED_MSG, HttpStatus.OK);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Note> updateNote(@RequestBody Note note) {
+    public ResponseEntity<String> updateNote(@RequestBody Note note) {
         noteService.updateNote(note);
-        return new ResponseEntity<>(note, HttpStatus.OK);
+        return new ResponseEntity<>(NOTE_UPDATED_MSG, HttpStatus.OK);
     }
 
 
@@ -63,4 +68,5 @@ public class NoteController {
         model.addAttribute("notes", notesByUsername);
         return "home::note_list";
     }
+
 }

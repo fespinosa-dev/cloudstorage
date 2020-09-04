@@ -41,6 +41,9 @@
                             </div>
                         </form>
                         <div class="table-responsive">
+                            <div class="alert alert-primary" role="alert" style="">
+                                File successfully added!
+                            </div>
                             <table class="table table-striped" th:fragment="file_list" id="file_list">
                                 <thead>
                                 <tr>
@@ -68,15 +71,18 @@
                                 class="btn btn-info float-right" onclick="showNoteModal()">
                             + Add a New Note
                         </button>
-
                         <div class="table-responsive">
+                            <div id="noteMessage" class="alert alert-primary d-none" role="alert" style="">
+                            </div>
+                            <div id="noteErrMessage" class="alert alert-danger d-none" role="alert" style="">
+                            </div>
                             <table class="table table-striped" th:fragment="note_list" id="note_list">
                                 <thead>
-                                    <tr>
-                                        <th style="width: 20%" scope="col"></th>
-                                        <th style="width: 20%" scope="col">Title</th>
-                                        <th style="width: 60%" scope="col">Description</th>
-                                    </tr>
+                                <tr>
+                                    <th style="width: 20%" scope="col"></th>
+                                    <th style="width: 20%" scope="col">Title</th>
+                                    <th style="width: 60%" scope="col">Description</th>
+                                </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="note : ${notes}">
@@ -143,15 +149,18 @@
                         </button>
 
                         <div class="table-responsive">
+                            <div class="alert alert-primary" role="alert" style="">
+                                Credential successfully added!
+                            </div>
                             <table class="table table-striped" th:fragment="credential_list"
                                    id="credential_list">
                                 <thead>
-                                    <tr>
-                                        <th style="width: 20%" scope="col"></th>
-                                        <th style="width: 35%" scope="col">URL</th>
-                                        <th style="width: 20%" scope="col">Username</th>
-                                        <th style="width: 25%" scope="col">Password</th>
-                                    </tr>
+                                <tr>
+                                    <th style="width: 20%" scope="col"></th>
+                                    <th style="width: 35%" scope="col">URL</th>
+                                    <th style="width: 20%" scope="col">Username</th>
+                                    <th style="width: 25%" scope="col">Password</th>
+                                </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="credential : ${credentials}">

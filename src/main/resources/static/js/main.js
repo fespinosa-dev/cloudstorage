@@ -15,6 +15,11 @@ function showCredentialModal(credentialId, url, username, password) {
     $('#credentialModal').modal('show');
 }
 
+function showMessage(msgId, msg) {
+    $("#" + msgId).html(msg.replaceAll("^\"|\"$", ""));
+    $("#" + msgId).removeClass("d-none");
+}
+
 function addNote(note) {
     $.ajax({
         type: "POST",
@@ -24,9 +29,11 @@ function addNote(note) {
         dataType: 'json',
         success: function (data) {
             loadNoteList();
+            showMessage("noteMessage", data);
         },
-        error: function (e) {
-            console.log(e)
+        error: function (xhr, status, error) {
+            showMessage("noteErrMessage", xhr.responseText);
+            $('#noteModal').modal('hide');
         }
     });
 }
@@ -40,9 +47,11 @@ function updateNote(note) {
         dataType: 'json',
         success: function (data) {
             loadNoteList();
+            showMessage("noteMessage", data);
         },
-        error: function (e) {
-            console.log(e)
+        error: function (xhr, status, error) {
+            showMessage("noteErrMessage", xhr.responseText);
+            $('#noteModal').modal('hide');
         }
     });
 }
@@ -72,6 +81,7 @@ function deleteNote(noteId) {
         dataType: 'json',
         success: function (data) {
             loadNoteList();
+            showMessage("noteMessage", data);
         },
         error: function (e) {
             console.log(e)
@@ -91,8 +101,9 @@ function deleteFile(id) {
         success: function (data) {
             loadFileList();
         },
-        error: function (e) {
-            console.log(e)
+        error: function (xhr, status, error) {
+            showMessage("noteErrMessage", xhr.responseText);
+            $('#noteModal').modal('hide');
         }
     });
 }
@@ -107,6 +118,7 @@ function loadNoteList() {
         },
         error: function (e) {
             console.log(e)
+            showMessage("noteErrMessage", "There was an error loading the note list.")
         }
     })
 }
