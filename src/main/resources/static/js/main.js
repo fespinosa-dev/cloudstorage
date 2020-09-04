@@ -16,7 +16,8 @@ function showCredentialModal(credentialId, url, username, password) {
 }
 
 function showMessage(msgId, msg) {
-    $("#" + msgId).html(msg.replaceAll("^\"|\"$", ""));
+    let message = msg.replaceAll("^\"|\"$", "");
+    $("#" + msgId).html(message);
     $("#" + msgId).removeClass("d-none");
 }
 
@@ -100,9 +101,10 @@ function deleteFile(id) {
         dataType: 'json',
         success: function (data) {
             loadFileList();
+            showMessage("fileMessage", data);
         },
         error: function (xhr, status, error) {
-            showMessage("noteErrMessage", xhr.responseText);
+            showMessage("fileErrMessage", xhr.responseText);
             $('#noteModal').modal('hide');
         }
     });
@@ -222,5 +224,27 @@ function loadFileList() {
         }
     })
 }
+
+$(document).ready(function () {
+    $("#fileUploadForm").on("submit", function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "/file/upload",
+            type: "POST",
+            data: new FormData(this),
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data) {
+                loadFileList();
+                showMessage("fileMessage", data);
+            },
+            error: function (xhr, status, error) {
+                showMessage("fileErrMessage", xhr.responseText);
+            }
+        });
+    });
+});
 
 

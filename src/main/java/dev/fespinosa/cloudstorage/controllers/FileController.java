@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +23,12 @@ import java.util.Optional;
 @RequestMapping("/file")
 public class FileController {
 
+    private final String FILE_UPLOAD_MSG = "File was successfully uploaded!";
+    private final String FILE_ERROR_MSG = "\"There was an error uploading the file!\"";
+    private final String FILE_DELETED_MSG = "\"File was successfully deleted!\"";
+    private final String FILE_NO_SELECTED_MSG = "\"Please select a multipartFile to upload\"";
+
+
     private FileService fileService;
 
     @Autowired
@@ -32,25 +37,20 @@ public class FileController {
     }
 
     @PostMapping("/upload")
-    public String singleFileUpload(Principal principal,
-                                   @RequestParam("fileUpload") MultipartFile multipartFile,
-                                   RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> singleFileUpload(Principal principal,
+                                                   @RequestParam("fileUpload") MultipartFile multipartFile) {
+        var response = new ResponseEntity<>(FILE_UPLOAD_MSG, HttpStatus.OK);
         if (multipartFile.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Please select a multipartFile to upload");
-            return "redirect:/home";
+            response = new ResponseEntity<>(FILE_NO_SELECTED_MSG, HttpStatus.BAD_REQUEST);
         }
         try {
             File file = File.from(multipartFile);
             fileService.saveFile(file);
-            redirectAttributes.addFlashAttribute("message",
-                    "You successfully uploaded '" + file.getName() + "'");
-
         } catch (IOException e) {
-            e.printStackTrace();
+            response = new ResponseEntity<>(FILE_ERROR_MSG, HttpStatus.BAD_REQUEST);
+
         }
-
-
-        return "redirect:/home";
+        return response;
 
     }
 
@@ -78,9 +78,9 @@ public class FileController {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<File> deleteNote(@RequestBody File file) {
+    public ResponseEntity<String> deleteNote(@RequestBody File file) {
         fileService.deleteFile(file);
-        return new ResponseEntity<>(file, HttpStatus.OK);
+        return new ResponseEntity<>(FILE_DELETED_MSG, HttpStatus.OK);
     }
 
     @GetMapping("/list")

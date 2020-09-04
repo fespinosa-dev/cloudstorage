@@ -37,7 +37,7 @@ public class NoteController {
     }
 
 
-    @PostMapping(value = "/add", produces = "text/plain")
+    @PostMapping(value = "/add")
     public ResponseEntity<String> addNote(Principal principal, @RequestBody Note note) {
         ResponseEntity<String> responseEntity = new ResponseEntity<>(NOTE_ADDED_MSG, HttpStatus.OK);
         Optional<User> userOpt = userService.findUserByUsername(principal.getName());
