@@ -149,8 +149,10 @@
                         </button>
 
                         <div class="table-responsive">
-                            <div class="alert alert-primary" role="alert" style="">
+                            <div id="credentialMessage" class="alert alert-primary d-none" role="alert" style="">
                                 Credential successfully added!
+                            </div>
+                            <div id="credentialErrMessage" class="alert alert-danger d-none" role="alert" style="">
                             </div>
                             <table class="table table-striped" th:fragment="credential_list"
                                    id="credential_list">

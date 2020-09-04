@@ -117,7 +117,6 @@ function loadNoteList() {
             $('#noteModal').modal('hide');
         },
         error: function (e) {
-            console.log(e)
             showMessage("noteErrMessage", "There was an error loading the note list.")
         }
     })
@@ -147,9 +146,11 @@ function addCredential(credential) {
         dataType: 'json',
         success: function (data) {
             loadCredentialList();
+            showMessage("credentialMessage", data);
         },
-        error: function (e) {
-            console.log(e)
+        error: function (xhr, status, error) {
+            showMessage("credentialErrMessage", xhr.responseText);
+            $('#CredentialModal').modal('hide');
         }
     });
 }
@@ -163,9 +164,11 @@ function updateCredential(credential) {
         dataType: 'json',
         success: function (data) {
             loadCredentialList();
+            showMessage("credentialMessage", data);
         },
-        error: function (e) {
-            console.log(e)
+        error: function (xhr, status, error) {
+            showMessage("credentialErrMessage", xhr.responseText);
+            $('#CredentialModal').modal('hide');
         }
     });
 }
@@ -181,9 +184,11 @@ function deleteCredential(credentialId) {
         dataType: 'json',
         success: function (data) {
             loadCredentialList();
+            showMessage("credentialMessage", data);
         },
-        error: function (e) {
-            console.log(e)
+        error: function (xhr, status, error) {
+            showMessage("credentialErrMessage", xhr.responseText);
+            $('#CredentialModal').modal('hide');
         }
     });
 }
@@ -199,7 +204,7 @@ function loadCredentialList() {
             $('#credentialModal').modal('hide');
         },
         error: function (e) {
-            console.log(e)
+            showMessage("noteErrMessage", "There was an error loading the credential list.")
         }
     })
 }

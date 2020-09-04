@@ -23,6 +23,12 @@ import java.util.Optional;
 @RequestMapping("/credential")
 public class CredentialsController {
 
+    private final String CREDENTIAL_ADDED_MSG = "\"Credential successfully added!\"";
+    private final String CREDENTIAL_DELETED_MSG = "\"Credential successfully deleted!\"";
+    private final String CREDENTIAL_UPDATED_MSG = "\"Credential successfully updated!\"";
+    private final String CREDENTIAL_ERROR_MSG = "\"There was an error adding the credential!\"";
+
+
     private UserService userService;
     private CredentialService credentialService;
     private EncryptionService encryptionService;
@@ -39,30 +45,30 @@ public class CredentialsController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<Credentials> addCredential(Principal principal, @RequestBody Credentials credentials) {
-        ResponseEntity<Credentials> responseEntity = new ResponseEntity<>(credentials, HttpStatus.OK);
+    public ResponseEntity<String> addCredential(Principal principal, @RequestBody Credentials credentials) {
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(CREDENTIAL_ADDED_MSG, HttpStatus.OK);
         Optional<User> userOpt = userService.findUserByUsername(principal.getName());
         userOpt.ifPresent(u -> credentials.setUserId(u.getUserId()));
         int credentialsCreated = credentialService.createCredentials(credentials);
         if (credentialsCreated <= 0) {
-            responseEntity = new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(CREDENTIAL_ERROR_MSG, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<Credentials> deleteCredentials(@RequestBody Credentials credentials) {
+    public ResponseEntity<String> deleteCredentials(@RequestBody Credentials credentials) {
         credentialService.deleteCredentials(credentials);
-        return new ResponseEntity<>(credentials, HttpStatus.OK);
+        return new ResponseEntity<>(CREDENTIAL_DELETED_MSG, HttpStatus.OK);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<Credentials> updateCredentials(@RequestBody Credentials credentials) {
+    public ResponseEntity<String> updateCredentials(@RequestBody Credentials credentials) {
         Optional<Credentials> credentialsOpt =
                 credentialService.findCredentialById(credentials.getId());
         credentialsOpt.ifPresent(c -> credentials.setKey(c.getKey()));
         credentialService.updateCredentials(credentials);
-        return new ResponseEntity<>(credentials, HttpStatus.OK);
+        return new ResponseEntity<>(CREDENTIAL_UPDATED_MSG, HttpStatus.OK);
     }
 
 
