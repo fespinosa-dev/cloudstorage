@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Principal;
@@ -27,6 +28,7 @@ public class FileController {
     private final String FILE_ERROR_MSG = "\"There was an error uploading the file!\"";
     private final String FILE_DELETED_MSG = "\"File was successfully deleted!\"";
     private final String FILE_NO_SELECTED_MSG = "\"Please select a multipartFile to upload\"";
+    private final String FILE_ALREADY_EXISTS_MSG = "You already uploaded this file.";
 
 
     private FileService fileService;
@@ -46,9 +48,10 @@ public class FileController {
         try {
             File file = File.from(multipartFile);
             fileService.saveFile(file);
+        } catch (FileAlreadyExistsException e) {
+            response = new ResponseEntity<>(FILE_ALREADY_EXISTS_MSG, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (IOException e) {
-            response = new ResponseEntity<>(FILE_ERROR_MSG, HttpStatus.BAD_REQUEST);
-
+            response = new ResponseEntity<>(FILE_ERROR_MSG, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
 

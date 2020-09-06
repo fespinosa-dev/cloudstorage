@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,6 +31,10 @@ public class FileService {
     }
 
     public int saveFile(File file) throws IOException {
+        Optional<File> fileByName = fileMapper.getFileByName(file.getName());
+        if (fileByName.isPresent()) {
+            throw new FileAlreadyExistsException("File already exists.");
+        }
         Principal principal = getPrincipal();
         Optional<User> userByUsernameOpt = userService.findUserByUsername(principal.getName());
         userByUsernameOpt.ifPresent(u -> file.setUserId(u.getUserId()));
