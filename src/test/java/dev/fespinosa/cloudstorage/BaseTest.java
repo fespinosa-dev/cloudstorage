@@ -52,6 +52,18 @@ public class BaseTest {
         return webElementOpt;
     }
 
+    protected Optional<WebElement> findSiblingElementByText(String text){
+        Optional<WebElement> webElementOpt = Optional.empty();
+        try {
+            WebElement element = driver.findElement(By.xpath("//*[text()='" + text + "']//following-sibling::td"));
+            webElementOpt = Optional.of(element);
+        } catch (NoSuchElementException ex) {
+            ex.printStackTrace();
+        }
+        return webElementOpt;
+
+    }
+
     protected void getPage(String page) {
         driver.get("http://localhost:" + this.port + page);
     }

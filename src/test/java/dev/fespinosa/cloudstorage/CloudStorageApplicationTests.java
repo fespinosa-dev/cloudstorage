@@ -2,6 +2,7 @@ package dev.fespinosa.cloudstorage;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.Optional;
@@ -184,11 +185,11 @@ class CloudStorageApplicationTests extends BaseTest {
 
         homePage.selectTab("Credentials");
 
-        homePage.addCredential("https://www.google.com/", "username", "password");
+        homePage.addCredential("https://www.google.com/", "username", "insane07");
 
         Optional<WebElement> urlOpt = findElementByText("https://www.google.com/");
         Optional<WebElement> usernameOpt = findElementByText("username");
-        Optional<WebElement> passwordOpt = findElementByText("password");
+        Optional<WebElement> passwordOpt = findSiblingElementByText("username");
 
 
         assertThat(urlOpt).isNotEmpty();
@@ -196,7 +197,7 @@ class CloudStorageApplicationTests extends BaseTest {
         assertThat(passwordOpt).isNotEmpty();
         assertThat(urlOpt.get().getText()).isEqualTo("https://www.google.com/");
         assertThat(usernameOpt.get().getText()).isEqualTo("username");
-        assertThat(passwordOpt.get().getText()).isEqualTo("password");
+        assertThat(passwordOpt.get().getText()).isNotBlank();
 
     }
 
@@ -220,15 +221,14 @@ class CloudStorageApplicationTests extends BaseTest {
 
         Optional<WebElement> urlOpt = findElementByText("https://www.google2.com/");
         Optional<WebElement> usernameOpt = findElementByText("new username");
-        Optional<WebElement> passwordOpt = findElementByText("new password");
-
+        Optional<WebElement> passwordOpt = findSiblingElementByText("new username");
 
         assertThat(urlOpt).isNotEmpty();
         assertThat(usernameOpt).isNotEmpty();
         assertThat(passwordOpt).isNotEmpty();
         assertThat(urlOpt.get().getText()).isEqualTo("https://www.google2.com/");
         assertThat(usernameOpt.get().getText()).isEqualTo("new username");
-        assertThat(passwordOpt.get().getText()).isEqualTo("new password");
+        assertThat(passwordOpt.get().getText()).isNotBlank();
 
     }
 

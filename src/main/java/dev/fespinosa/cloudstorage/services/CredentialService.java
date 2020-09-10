@@ -45,7 +45,6 @@ public class CredentialService {
 
     public List<Credentials> getAllCredentialsByUsername(String username) {
         List<Credentials> credentialsByUsername = credentialsMapper.getCredentialsByUsername(username);
-        credentialsByUsername.forEach(this::decryptPassword);
         return credentialsByUsername;
     }
 

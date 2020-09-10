@@ -80,4 +80,20 @@ public class CredentialsController {
         return "home::credential_list";
     }
 
+
+    @PostMapping("/decrypt")
+    public ResponseEntity<String> getDecryptedPassword(@RequestBody Credentials credentials) {
+        String decryptedPassword = "";
+        var response = new ResponseEntity<>(decryptedPassword, HttpStatus.INTERNAL_SERVER_ERROR);
+        Optional<Credentials> credentialByIdOpt =
+                credentialService.findCredentialById(credentials.getId());
+        if (credentialByIdOpt.isPresent()) {
+            String key = credentialByIdOpt.get().getKey();
+            decryptedPassword = encryptionService.decryptValue(credentials.getPassword(),
+                    credentialByIdOpt.get().getKey());
+
+        }
+        return new ResponseEntity<>("\"" + decryptedPassword + "\"", HttpStatus.OK);
+    }
+
 }

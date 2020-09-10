@@ -8,11 +8,37 @@ function showNoteModal(noteId, noteTitle, noteDescription) {
 
 // For opening the credentials modal
 function showCredentialModal(credentialId, url, username, password) {
-    $('#credential-id').val(credentialId ? credentialId : '');
-    $('#credential-url').val(url ? url : '');
-    $('#credential-username').val(username ? username : '');
-    $('#credential-password').val(password ? password : '');
+    let credential = {};
+    credential["id"] = credentialId;
+    credential["url"] = url;
+    credential["password"] = password;
+    credential["username"] = username;
+    decryptCredentialPassword(credential, function (decryptedPassword) {
+        credential['password'] = decryptedPassword;
+        doShowCredentialModal(credential);
+    })
+}
+
+function doShowCredentialModal(credential) {
+    $('#credential-id').val(credential.id ? credential.id : '');
+    $('#credential-url').val(credential.url ? credential.url : '');
+    $('#credential-username').val(credential.username ? credential.username : '');
+    $('#credential-password').val(credential.password ? credential.password : '');
     $('#credentialModal').modal('show');
+}
+
+function decryptCredentialPassword(credential, onSuccess) {
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/credential/decrypt",
+        data: JSON.stringify(credential),
+        dataType: 'json',
+        success: onSuccess,
+        error: function (xhr, status, error) {
+            console.log("Error decrypting credentials password")
+        }
+    });
 }
 
 function showMessage(msgId, msg) {
