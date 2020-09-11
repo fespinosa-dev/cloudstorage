@@ -18,13 +18,18 @@
                 <div th:if="${param.logout}" class="alert alert-dark">
                     You have been logged out
                 </div>
+                <div th:if="${signedup}" class="alert alert-primary" role="alert" style="">
+                    You successfully signed up!
+                </div>
                 <div class="form-group">
                     <label for="inputUsername">Username</label>
-                    <input type="input" class="form-control" name="username" id="inputUsername" placeholder="Enter Username" maxlength="20" required>
+                    <input type="input" class="form-control" name="username" id="inputUsername"
+                           placeholder="Enter Username" maxlength="20" required>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword">Password</label>
-                    <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Enter Password" maxlength="20" required>
+                    <input type="password" class="form-control" name="password" id="inputPassword"
+                           placeholder="Enter Password" maxlength="20" required>
                 </div>
                 <button type="submit" id="loginButton" class="btn btn-primary">Login</button>
             </form>
