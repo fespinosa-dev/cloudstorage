@@ -29,7 +29,7 @@ public class SignUpController {
 
 
     @PostMapping("/signup")
-    public String signUp(User user, Model model) throws UsernameAlreadyExistsException {
+    public String signUp(User user, Model model, RedirectAttributes redirectAttributes) throws UsernameAlreadyExistsException {
         int usersCreated = 0;
         usersCreated = userService.createUser(user);
 
@@ -38,8 +38,9 @@ public class SignUpController {
         } else {
             model.addAttribute("error", true);
         }
+        redirectAttributes.addFlashAttribute("signedup", true);
 
-        return "signup";
+        return "redirect:/login";
     }
 
     @ExceptionHandler(Exception.class)
