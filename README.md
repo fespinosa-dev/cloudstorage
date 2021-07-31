@@ -38,7 +38,11 @@ mvn spring-boot:run
 
 ## Running the tests
 
-In progress...
+You can run the tests wht maven like so:
+
+```shell
+mvn test 
+```
 
 ## Deploying application to AWS Elastic Beanstalk
 In progress...
