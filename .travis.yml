@@ -1,6 +1,6 @@
 language: java
 sudo: required
-dist: xenial
+dist: trusty
 addons:
   firefox: "60.0"
 before_install:
