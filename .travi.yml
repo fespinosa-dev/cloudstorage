@@ -1,6 +1,6 @@
+language: java
 sudo: required
 dist: trusty
-language: java
 addons:
   firefox: "60.0"
 before_install:
