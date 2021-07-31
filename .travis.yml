@@ -3,11 +3,13 @@ sudo: required
 dist: focal
 addons:
   firefox: "60.0"
+services:
+  - xvfb
+before_script:
+  - export DISPLAY=:99.0
 before_install:
   - sudo apt-get update
   - sudo apt-get install dbus-x11
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
   - export CHROME_BIN=/usr/bin/google-chrome
   - sudo apt-get install -y libappindicator1 fonts-liberation
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
