@@ -7,6 +7,7 @@ services:
   - xvfb
 before_script:
   - export DISPLAY=:99.0
+skip_cleanup: true
 before_install:
   - sudo apt-get update
   - sudo apt-get install dbus-x11
@@ -20,3 +21,8 @@ before_install:
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.20.1/geckodriver-v0.20.1-linux64.tar.gz
   - tar -xzf geckodriver-v0.20.1-linux64.tar.gz
   - sudo cp geckodriver /usr/bin
+  - sudo apt-get install jq
+  - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
+after_success:
+  - java -jar ~/codacy-coverage-reporter-assembly-latest.jar report -l Java -r target/site/jacoco/jacoco.xml
+
