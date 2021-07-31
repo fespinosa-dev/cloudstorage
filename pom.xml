@@ -10,7 +10,7 @@
     </parent>
     <groupId>dev.fespinosa.cloudstorage</groupId>
     <artifactId>cloudstorage</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>cloudstorage</name>
     <description>Final Project for Udacity's Spring Boot Basics course.</description>
 
