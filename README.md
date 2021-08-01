@@ -14,13 +14,37 @@ Super*Duper*Drive is a simple cloud storage web application that lets you manage
 2. **Note Management:** Add/update/remove text notes
 3. **Password Management:** Save, edit, and delete website credentials.  
 
+## Overview 
 
-## Technologies used
+### Technologies used
 
 * The back-end with [Spring Boot](https://spring.io/projects/spring-boot)
 * The front-end with [Thymeleaf](https://www.thymeleaf.org/)
 * Application tests with [Selenium](https://www.selenium.dev/)
 
+#### Login Page
+
+![img.png](img.png)
+
+#### Sign up page
+
+![img_1.png](img_1.png)
+
+#### Home page
+
+You can upload files.
+
+![img_2.png](img_2.png)
+
+Notes.
+
+![img_3.png](img_3.png)
+
+![img_5.png](img_5.png)
+
+Credentials.
+
+![img_4.png](img_4.png)
 
 ## Requirements
 
